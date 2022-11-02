@@ -53,9 +53,9 @@ public static class Commands
         Console.WriteLine();
         Console.WriteLine();
 
-        Console.WriteLine("****************************************");
-        Console.WriteLine("*** Overriding Docker Image Defaults ***");
-        Console.WriteLine("****************************************");
+        Console.WriteLine("########################################");
+        Console.WriteLine("### Overriding Docker Image Defaults ###");
+        Console.WriteLine("########################################");
         Console.WriteLine("By default, this script will use the docker image $DEFAULT_IMAGE_SPECIFICATION");
         Console.WriteLine("(repository: $DEFAULT_REPOSITORY, image: $DEFAULT_IMAGE, tag: $DEFAULT_TAG)");
         Console.WriteLine();
