@@ -18,6 +18,7 @@ arguments.RemoveAt(0);
 if (arguments.Count > 0 && args[0] == "--DEBUG")
 {
     Debug.IsEnabled = true;
+    arguments.RemoveAt(0);
 }
 
 if (Helpers.OsRequiresSudo())
