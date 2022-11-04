@@ -133,7 +133,7 @@ public static class Helpers
         var p = Process.Start(startInfo)!;
         await p.WaitForExitAsync();
         var id = await p.StandardOutput.ReadToEndAsync();
-        return id;
+        return id.Trim();
     }
 
     public static async Task<string> NixUserGroupAsync()
@@ -148,6 +148,6 @@ public static class Helpers
         var p = Process.Start(startInfo)!;
         await p.WaitForExitAsync();
         var id = await p.StandardOutput.ReadToEndAsync();
-        return id;
+        return id.Trim();
     }
 }
