@@ -152,7 +152,7 @@ public static class Commands
 
         if (!Directory.Exists(outputDir))
         {
-            Console.WriteLine("Output directory ${OUTPUT_DIR} does not exist. Creating ${OUTPUT_DIR}");
+            Console.WriteLine($"Output directory ${outputDir} does not exist. Creating ${outputDir}");
             Directory.CreateDirectory(outputDir);
         }
 
