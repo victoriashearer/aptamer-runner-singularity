@@ -55,11 +55,15 @@ Console.WriteLine($"Using docker image {imageInfo.FullName()}\n");
 
 Console.WriteLine("Pulling docker image to verify the latest version is present.\n");
 
-if (!await Commands.PullImageIfMissingAsync(imageInfo))
+// We only need to run a pull if a repo has been specified
+if (!string.IsNullOrWhiteSpace(imageInfo.Repo))
 {
-    Console.WriteLine($"Failed to pull docker image {imageInfo.FullName()}");
-    Environment.Exit(exitFailure);
-    return; // Silence uninitialized warning
+    if (!await Commands.PullImageIfMissingAsync(imageInfo))
+    {
+        Console.WriteLine($"Failed to pull docker image {imageInfo.FullName()}");
+        Environment.Exit(exitFailure);
+        return; // Silence uninitialized warning
+    }
 }
 
 if (arguments.Count == 0)
