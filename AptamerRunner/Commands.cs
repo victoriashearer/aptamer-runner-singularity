@@ -146,7 +146,7 @@ public static class Commands
             }
             else
             {
-                parsedParams.Append(nextArg);
+                parsedParams.Add(nextArg);
             }
         }
 
