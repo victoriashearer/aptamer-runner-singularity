@@ -6,8 +6,7 @@ public static class Consts
     
     public const string DefaultImage = "thiel-aptamer";
     public const string DefaultTag = "latest";
-    //public const string DefaultRepository = "ghcr.io/ui-icts";
-    public const string DefaultRepository = "ghcr.io/eaembree";
+    public const string DefaultRepository = "ghcr.io/ui-icts";
 
     public static class Commands
     {
