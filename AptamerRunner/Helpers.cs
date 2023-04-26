@@ -5,15 +5,16 @@ namespace AptamerRunner;
 
 public static class Helpers
 {
-    public static ImageInfo FullDockerImageName()
+   
+    public static ImageInfo DockerImageInfo()
     {
         var vars = Environment.GetEnvironmentVariables();
 
-        string image = vars.GetStringOrDefault(EnvVar.ImageOverride, Consts.DefaultImage);
-        string tag = vars.GetStringOrDefault(EnvVar.TagOverride, Consts.DefaultTag);
+        string image = vars.GetStringOrDefault(EnvVar.ImageOverride, DockerDefaults.Image);
+        string tag = vars.GetStringOrDefault(EnvVar.TagOverride, DockerDefaults.Tag);
         string? repo = vars.Contains(EnvVar.RepositoryOverride)
             ? vars[EnvVar.RepositoryOverride] as string
-            : Consts.DefaultRepository;
+            : DockerDefaults.Repository;
 
 
         if (string.IsNullOrWhiteSpace(image))
@@ -22,7 +23,7 @@ public static class Helpers
         if (string.IsNullOrWhiteSpace(tag))
         {
             // Might specifying an empty string to default to ":latest"
-            tag = Consts.DefaultTag;
+            tag = DockerDefaults.Tag;
         }
 
         return new ImageInfo(repo: repo, image: image, tag: tag);

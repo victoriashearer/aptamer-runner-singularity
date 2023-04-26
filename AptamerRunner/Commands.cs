@@ -56,11 +56,11 @@ public static class Commands
         Console.WriteLine("########################################");
         Console.WriteLine("### Overriding Docker Image Defaults ###");
         Console.WriteLine("########################################");
-        Console.WriteLine("By default, this script will use the docker image $DEFAULT_IMAGE_SPECIFICATION");
-        Console.WriteLine("(repository: $DEFAULT_REPOSITORY, image: $DEFAULT_IMAGE, tag: $DEFAULT_TAG)");
+        Console.WriteLine($"By default, this script will use the docker image {DockerDefaults.ImageInfo().FullName()}");
+        Console.WriteLine($"(repository: {DockerDefaults.Repository}, image: {DockerDefaults.Image}, tag: {DockerDefaults.Tag})");
         Console.WriteLine();
         Console.WriteLine(
-            "If you woud like to change the image, tag, or repository used set the environment variables APTAMER_IMAGE, APTAMER_TAG, or APTAMER_REPOSITORY respectively. Each will be used in place of the respective default."
+            "If you would like to change the image, tag, or repository used set the environment variables APTAMER_IMAGE, APTAMER_TAG, or APTAMER_REPOSITORY respectively. Each will be used in place of the respective default."
                 .WordWrap(Consts.WordWrapLength));
         Console.WriteLine();
     }

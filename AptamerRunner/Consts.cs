@@ -4,15 +4,26 @@ public static class Consts
 {
     public const int WordWrapLength = 80;
     
-    public const string DefaultImage = "thiel-aptamer";
-    public const string DefaultTag = "latest";
-    public const string DefaultRepository = "ghcr.io/ui-icts";
-
     public static class Commands
     {
         public const string HelpCmd = "help";
         public const string PredictStructureCmd = "predict-structures";
         public const string CreateGraphCmd = "create-graph";
+    }
+}
+
+public static class DockerDefaults
+{
+    public const string Image = "thiel-aptamer";
+    public const string Tag = "latest";
+    public const string Repository = "ghcr.io/ui-icts";
+    
+    public static ImageInfo ImageInfo()
+    {
+        return new ImageInfo(
+            repo: Repository,
+            image: Image,
+            tag: Tag);
     }
 }
 

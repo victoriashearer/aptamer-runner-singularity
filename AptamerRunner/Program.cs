@@ -41,7 +41,7 @@ if (!await Helpers.DockerExistsAsync())
 ImageInfo imageInfo;
 try
 {
-    imageInfo = Helpers.FullDockerImageName();
+    imageInfo = Helpers.DockerImageInfo();
 }
 catch (Exception ex)
 {
