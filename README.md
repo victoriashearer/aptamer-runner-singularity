@@ -27,8 +27,6 @@ For more information on self-contained deployments see the [official Microsoft d
 | Description | RID |
 |-------------|-----|
 | not version-specific (Min version 10.12 Sierra) | os-x64 |
-| 10.10 Yosemite | osx.10.10-x64 |
-| 10.11 El Capitan | osx.10.11-x64 |
 
 
 # Usage Notes
