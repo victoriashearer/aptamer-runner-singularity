@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace AptamerRunner;
@@ -6,15 +6,15 @@ namespace AptamerRunner;
 public static class Helpers
 {
    
-    public static ImageInfo DockerImageInfo()
+    public static ImageInfo SingularityImageInfo()
     {
         var vars = Environment.GetEnvironmentVariables();
 
-        string image = vars.GetStringOrDefault(EnvVar.ImageOverride, DockerDefaults.Image);
-        string tag = vars.GetStringOrDefault(EnvVar.TagOverride, DockerDefaults.Tag);
+        string image = vars.GetStringOrDefault(EnvVar.ImageOverride, SingularityDefaults.Image);
+        string tag = vars.GetStringOrDefault(EnvVar.TagOverride, SingularityDefaults.Tag);
         string? repo = vars.Contains(EnvVar.RepositoryOverride)
             ? vars[EnvVar.RepositoryOverride] as string
-            : DockerDefaults.Repository;
+            : SingularityDefaults.Repository;
 
 
         if (string.IsNullOrWhiteSpace(image))
@@ -23,13 +23,13 @@ public static class Helpers
         if (string.IsNullOrWhiteSpace(tag))
         {
             // Might specifying an empty string to default to ":latest"
-            tag = DockerDefaults.Tag;
+            tag = SingularityDefaults.Tag;
         }
 
         return new ImageInfo(repo: repo, image: image, tag: tag);
     }
 
-    public static async Task<bool> DockerExistsAsync()
+    public static async Task<bool> SingularityExistsAsync()
     {
         try
         {
@@ -37,26 +37,26 @@ public static class Helpers
         }
         catch (Exception)
         {
-            // Almost certainly we've just filed to execute the docker command because it doesn't exist
+            // Almost certainly we've just filed to execute the singularity command because it doesn't exist
             return false;
         }
     }
 
     /// <summary>
-    /// Executes a docker command (adding sudo if necessary) and returns whether the command
+    /// Executes a singularity command (adding sudo if necessary) and returns whether the command
     /// was successful or not.
     /// </summary>
     /// <param name="args"></param>
     /// <returns></returns>
     internal static async Task<bool> ExecuteCmdAsync(List<string> args)
     {
-        string fileName = "docker";
+        string fileName = "singularity";
         List<string> arguments = new List<string>(args);
 
         if (OsRequiresSudo())
         {
             fileName = "sudo";
-            arguments.Insert(0, "docker");
+            arguments.Insert(0, "singularity");
         }
 
         var startInfo = new ProcessStartInfo()
