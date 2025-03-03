@@ -1,4 +1,4 @@
-﻿namespace AptamerRunner;
+namespace AptamerRunner;
 
 public static class Consts
 {
@@ -12,7 +12,7 @@ public static class Consts
     }
 }
 
-public static class DockerDefaults
+public static class SingularityDefaults
 {
     public const string Image = "thiel-aptamer";
     public const string Tag = "latest";
