@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -10,7 +10,7 @@ public static class Commands
     {
         List<string> arguments = new List<string>()
         {
-            "pull",
+            "singularity", "pull",
             imageInfo.FullName()
         };
 
@@ -20,7 +20,7 @@ public static class Commands
     public static async Task DisplayHelpAsync(ImageInfo imageInfo)
     {
         Console.WriteLine(
-            "This application simplifies execution of the aptamer scripts by using Docker to execute commands instead of the requirement of installing the relevant tools."
+            "This application simplifies execution of the aptamer scripts by using Singularity to execute commands instead of the requirement of installing the relevant tools."
                 .WordWrap(Consts.WordWrapLength));
         Console.WriteLine("See below for the help of each of the command accepted by this script.");
         Console.WriteLine();
@@ -44,7 +44,7 @@ public static class Commands
 
         await Helpers.ExecuteCmdAsync(new List<string>()
         {
-            "run", "--rm",
+            "singularity", "exec",
             imageInfo.FullName(),
             "bash", "-c",
             bashCommand
@@ -54,13 +54,13 @@ public static class Commands
         Console.WriteLine();
 
         Console.WriteLine("########################################");
-        Console.WriteLine("### Overriding Docker Image Defaults ###");
+        Console.WriteLine("### Overriding Singularity Image Defaults ###");
         Console.WriteLine("########################################");
-        Console.WriteLine($"By default, this script will use the docker image {DockerDefaults.ImageInfo().FullName()}");
+        Console.WriteLine($"By default, this script will use the singularity image {DockerDefaults.ImageInfo().FullName()}");
         Console.WriteLine($"(repository: {DockerDefaults.Repository}, image: {DockerDefaults.Image}, tag: {DockerDefaults.Tag})");
         Console.WriteLine();
         Console.WriteLine(
-            "If you would like to change the image, tag, or repository used set the environment variables APTAMER_IMAGE, APTAMER_TAG, or APTAMER_REPOSITORY respectively. Each will be used in place of the respective default."
+            "If you would like to change the image, tag, or repository used set the environment variables APTAMER_IMAGE, APTAMER_TAG, or APTAMER_REPOSITORY respectively. Each will be used in place of the defaults."
                 .WordWrap(Consts.WordWrapLength));
         Console.WriteLine();
     }
@@ -156,9 +156,9 @@ public static class Commands
             Directory.CreateDirectory(outputDir);
         }
 
-        var dockerArgs = new List<string>()
+        var singularityArgs = new List<string>()
         {
-            "run", "--rm",
+            "singularity", "exec"
         };
 
         // If non-windows must set --user or we end up with root owned files
@@ -166,24 +166,23 @@ public static class Commands
         {
             var userId = await Helpers.NixUserIdAsync();
             var group = await Helpers.NixUserGroupAsync();
-            dockerArgs.AddRange(new List<string>()
+            singularityArgs.AddRange(new List<string>()
             {
                 "--user", $"{userId}:{group}"
             });
         }
-        
 
-        dockerArgs.AddRange(new List<string>()
+        singularityArgs.AddRange(new List<string>()
         {
-            "--mount", $"type=bind,source={inputFileDir},destination=/files,ro=true",
-            "--mount", $"type=bind,source={outputDir},destination=/data",
+            "--bind", $"{inputFileDir}:/files:ro",
+            "--bind", $"{outputDir}:/data",
             imageInfo.FullName(),
             "predict-structures", $"/files/{inputFileName}"
         });
 
-        dockerArgs.AddRange(parsedParams);
+        singularityArgs.AddRange(parsedParams);
 
-        await Helpers.ExecuteCmdAsync(dockerArgs);
+        await Helpers.ExecuteCmdAsync(singularityArgs);
     }
 
     public static async Task CreateGraphAsync(ImageInfo imageInfo, string workingDir, List<string> arguments)
@@ -198,7 +197,7 @@ public static class Commands
 
         string filePathArg = localArgs[0];
         localArgs.RemoveAt(0);
-        
+
         if (!File.Exists(filePathArg))
         {
             Console.WriteLine($"Must specify the path to a file. {filePathArg} is not a file");
@@ -214,10 +213,10 @@ public static class Commands
         filePathArg = Path.GetFullPath(filePathArg);
         string inputFileName = Path.GetFileName(filePathArg);
         string inputFileDir = Path.GetDirectoryName(filePathArg)!;
-        
-        var dockerArgs = new List<string>()
+
+        var singularityArgs = new List<string>()
         {
-            "run", "--rm",
+            "singularity", "exec"
         };
 
         // If non-windows must set --user or we end up with root owned files
@@ -225,22 +224,21 @@ public static class Commands
         {
             var userId = await Helpers.NixUserIdAsync();
             var group = await Helpers.NixUserGroupAsync();
-            dockerArgs.AddRange(new List<string>()
+            singularityArgs.AddRange(new List<string>()
             {
                 "--user", $"{userId}:{group}"
             });
         }
-        
 
-        dockerArgs.AddRange(new List<string>()
+        singularityArgs.AddRange(new List<string>()
         {
-            "--mount", $"type=bind,source={inputFileDir},destination=/files",
+            "--bind", $"{inputFileDir}:/files",
             imageInfo.FullName(),
             "create-graph", $"/files/{inputFileName}"
         });
 
-        dockerArgs.AddRange(localArgs);
+        singularityArgs.AddRange(localArgs);
 
-        await Helpers.ExecuteCmdAsync(dockerArgs);
+        await Helpers.ExecuteCmdAsync(singularityArgs);
     }
 }
